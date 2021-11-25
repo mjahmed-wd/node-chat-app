@@ -60,6 +60,7 @@ const addUserValidationHandler = function (req, res, next) {
     // remove uploaded files
     if (req.files.length > 0) {
       const { filename } = req.files[0];
+      console.log(filename, "filename");
       unlink(
         path.join(__dirname, `/../public/uploads/avatars/${filename}`),
         (err) => {
@@ -75,14 +76,7 @@ const addUserValidationHandler = function (req, res, next) {
   }
 };
 
-async function removeUser(req, res, next) {
-  try {
-    const user = await User.findByIdAndDelete({_id: req.params.id});
-   
-  } catch (err) {
-    
-  }
-}
+
 
 module.exports = {
   addUserValidators,

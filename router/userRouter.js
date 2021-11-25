@@ -30,4 +30,6 @@ router.post(
   addUser
 );
 
+router.delete("/:id", removeUser);
+
 module.exports = router;

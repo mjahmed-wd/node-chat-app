@@ -1,4 +1,7 @@
 const bcrypt = require("bcrypt");
+const path = require("path");
+const { unlink } = require("fs");
+
 
 const User = require("../models/People");
 
@@ -46,8 +49,32 @@ async function addUser(req, res, next) {
   }
 }
 
+async function removeUser(req, res, next) {
+  try {
+    const user = await User.findOneAndDelete({ _id: req.params.id });
+    if (user.avatar) {
+      unlink(
+        path.join(__dirname, `/../public/uploads/avatars/${user.avatar}`),
+        (err) => {
+          if (err) console.log(err);
+        }
+      );
+    }
+    res.status(200).json({ message: "User deleted successfully" });
+  } catch (err) {
+    res.status(500).json({
+      errors: {
+        common: {
+          msg: "Could Not Delete User",
+        },
+      },
+    });
+  }
+}
+
 
 module.exports = {
   getUsers,
   addUser,
+  removeUser
 };
